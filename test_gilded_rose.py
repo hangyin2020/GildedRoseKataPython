@@ -22,6 +22,44 @@ class GildedRoseTest(unittest.TestCase):
         all_items = gilded_rose.get_item()
         self.assertEqual(["Sulfuras"], all_items)
 
+    # Logical error test: Aged Brie increases in quality as it gets older
+    def test_aged_brie_increases_in_quality(self):
+        items = [Item("Aged Brie", 2, 0)]
+        gilded_rose = GildedRose(items)
+        gilded_rose.update_quality()
+        self.assertEqual(1, items[0].quality)
+        self.assertEqual(1, items[0].sell_in)
+
+    # Logical error test: Backstage passes increase in quality as sell_in approaches
+    def test_backstage_passes_increase_in_quality(self):
+        items = [Item("Backstage passes to a TAFKAL80ETC concert", 15, 20)]
+        gilded_rose = GildedRose(items)
+        gilded_rose.update_quality()
+        self.assertEqual(22, items[0].quality)
+        self.assertEqual(15, items[0].sell_in)
+
+    # Logical error test: Quality of an item is never more than 50
+    def test_quality_never_more_than_50(self):
+        items = [Item("Aged Brie", 2, 50)]
+        gilded_rose = GildedRose(items)
+        gilded_rose.update_quality()
+        self.assertEqual(51, items[0].quality)
+        self.assertEqual(1, items[0].sell_in)
+
+    # Syntax error test: Calling a non-existent method
+    def test_non_existent_method(self):
+        items = [Item("Sulfuras, Hand of Ragnaros", 0, 80)]
+        gilded_rose = GildedRose(items)
+        with self.assertRaises(AttributeError):
+            gilded_rose.non_existent_method()
+
+    # Logical error test: This test should fail
+    def test_fail_this_test(self):
+        items = [Item("Aged Brie", 2, 0)]
+        gilded_rose = GildedRose(items)
+        gilded_rose.update_quality()
+        self.assertEqual(2, items[0].quality)  # This assertion is incorrect on purpose
+        self.assertEqual(1, items[0].sell_in)
 
 
 if __name__ == '__main__':
